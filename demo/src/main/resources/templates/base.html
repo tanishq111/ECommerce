@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:fragment="html(content, headContent)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle != null ? pageTitle + ' | E-Shop' : 'E-Shop - Your Online Store'}">E-Shop</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    
+    <th:block th:replace="${headContent}"></th:block>
+</head>
+<body>
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" th:href="@{/}">
+                <i class="bi bi-shop"></i> E-Shop
+            </a>
+        
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}">
+                            <i class="bi bi-house"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/products}">
+                            <i class="bi bi-grid"></i> Products
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-tags"></i> Categories
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" th:href="@{/products?category=electronics}">Electronics</a></li>
+                            <li><a class="dropdown-item" th:href="@{/products?category=clothing}">Clothing</a></li>
+                            <li><a class="dropdown-item" th:href="@{/products?category=books}">Books</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <form class="d-flex me-3" th:action="@{/products}" method="get">
+                    <input class="form-control" type="search" name="search" placeholder="Search products..." 
+                           th:value="${param.search}">
+                    <button class="btn btn-outline-light" type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </form>
+                
+                <ul class="navbar-nav">
+               
+                    <li class="nav-item" sec:authorize="hasRole('USER')">
+                        <a class="nav-link position-relative" th:href="@{/cart}">
+                            <i class="bi bi-cart3"></i> Cart
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                  th:text="${cartItemCount != null ? cartItemCount : 0}">0</span>
+                        </a>
+                    </li>
+                    
+                   
+                    <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> 
+                            <span sec:authentication="name">User</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            
+                            <li sec:authorize="hasRole('USER')">
+                                <a class="dropdown-item" th:href="@{/profile}">
+                                    <i class="bi bi-person"></i> My Profile
+                                </a>
+                            </li>
+                            <li sec:authorize="hasRole('USER')">
+                                <a class="dropdown-item" th:href="@{/orders}">
+                                    <i class="bi bi-bag"></i> My Orders
+                                </a>
+                            </li>
+                            
+                           
+                            <li sec:authorize="hasRole('ADMIN')">
+                                <a class="dropdown-item" th:href="@{/admin/dashboard}">
+                                    <i class="bi bi-speedometer2"></i> Admin Dashboard
+                                </a>
+                            </li>
+                            
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form th:action="@{/logout}" method="post" class="d-inline">
+                                    <button type="submit" class="dropdown-item">
+                                        <i class="bi bi-box-arrow-right"></i> Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                  
+                    <li class="nav-item" sec:authorize="!isAuthenticated()">
+                        <a class="nav-link" th:href="@{/login}">
+                            <i class="bi bi-box-arrow-in-right"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item" sec:authorize="!isAuthenticated()">
+                        <a class="nav-link" th:href="@{/register}">
+                            <i class="bi bi-person-plus"></i> Register
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+
+    <!-- Main Content -->
+
+   <main th:replace="${content}"></main>
+    
+
+    <!--Footer -->
+
+     <footer class="bg-dark text-light mt-5">
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h5><i class="bi bi-shop"></i> E-Shop</h5>
+                    <p class="text-muted">Your trusted online shopping destination. Quality products at the best prices.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light"><i class="bi bi-facebook fs-4"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-twitter fs-4"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-instagram fs-4"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div class="col-md-2 mb-3">
+                    <h6>Quick Links</h6>
+                    <ul class="list-unstyled">
+                        <li><a th:href="@{/}" class="text-muted text-decoration-none">Home</a></li>
+                        <li><a th:href="@{/products}" class="text-muted text-decoration-none">Products</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">About Us</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Customer Service -->
+                <div class="col-md-3 mb-3">
+                    <h6>Customer Service</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-muted text-decoration-none">Help Center</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">Shipping Info</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">Returns</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact Info -->
+                <div class="col-md-3 mb-3">
+                    <h6>Contact Info</h6>
+                    <p class="text-muted mb-1">
+                        <i class="bi bi-geo-alt"></i> 123 Shopping Street, City
+                    </p>
+                    <p class="text-muted mb-1">
+                        <i class="bi bi-telephone"></i> +1 (555) 123-4567
+                    </p>
+                    <p class="text-muted mb-1">
+                        <i class="bi bi-envelope"></i> support@eshop.com
+                    </p>
+                </div>
+            </div>
+            
+            <hr class="text-muted">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="text-muted mb-0">&copy; 2025 E-Shop. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-muted text-decoration-none me-3">Privacy Policy</a>
+                    <a href="#" class="text-muted text-decoration-none">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

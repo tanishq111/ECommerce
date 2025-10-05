@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base :: html(~{::#content-wrapper}, ~{::#head-content-wrapper})}">
+<head>
+   <th:block id="head-content-wrapper">
+        <title>Welcome to E-Shop - Your Online Store</title>
+    </th:block>
+    <main id="content-wrapper">
+        <section class="hero-section bg-light py-5">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <h1 class="display-4 fw-bold text-primary mb-3">Welcome to E-Shop</h1>
+                        <p class="lead text-muted mb-4">
+                            Discover amazing products at unbeatable prices. Shop from thousands of items across multiple categories.
+                        </p>
+                        <div class="d-flex gap-3">
+                            <a th:href="@{/products}" class="btn btn-primary btn-lg">
+                                <i class="bi bi-bag-check"></i> Shop Now
+                            </a>
+                            <a th:href="@{/products}" class="btn btn-outline-primary btn-lg">
+                                <i class="bi bi-grid"></i> Browse Categories
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 text-center">
+                        <img th:src="@{/img/hero-image.jpg}" src="https://via.placeholder.com/500x400?text=E-Shop+Hero" 
+                             alt="E-Shop" class="img-fluid rounded">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <div class="row">
+                    <div class="col-lg-3 col-md-6 mb-4" th:each="product : ${latestProducts}">
+                        <div class="card product-card h-100 border-0 shadow-sm">
+                            <div class="position-relative">
+                                <img th:src="@{/img/products/{image}(image=${product.image})}" 
+                                     th:alt="${product.title}"
+                                     src="https://via.placeholder.com/300x200?text=Product"
+                                     class="card-img-top" style="height: 200px; object-fit: cover;">
+                                <div class="badge bg-danger position-absolute top-0 end-0 m-2" 
+                                     th:if="${product.discount > 0}" th:text="${product.discount + '% OFF'}">
+                                    10% OFF
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title" th:text="${product.title}">Product Name</h6>
+                                <p class="card-text text-muted small" th:text="${#strings.abbreviate(product.description, 50)}">
+                                    Product description...
+                                </p>
+                                <div class="price-section mb-2">
+                                    <span class="text-success fw-bold" 
+                                          th:text="'₹' + ${product.discountPrice != null ? product.discountPrice : product.price}">
+                                        ₹999
+                                    </span>
+                                    <span class="text-muted text-decoration-line-through ms-2" 
+                                          th:if="${product.discountPrice != null}" 
+                                          th:text="'₹' + ${product.price}">
+                                        ₹1299
+                                    </span>
+                                </div>
+                                <small class="text-muted">Stock: <span th:text="${product.stock}">10</span></small>
+                            </div>
+                            <div class="card-footer bg-transparent border-0 p-3">
+                                <div class="d-grid gap-2">
+                                    <a th:href="@{/product/{id}(id=${product.id})}" class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-eye"></i> View Details
+                                    </a>
+                                    <form th:action="@{/cart/add}" method="post" class="d-inline">
+                                        <input type="hidden" name="productId" th:value="${product.id}">
+                                        <button type="submit" class="btn btn-primary btn-sm w-100" 
+                                                th:disabled="${product.stock == 0}">
+                                            <i class="bi bi-cart-plus"></i> 
+                                            <span th:text="${product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}">Add to Cart</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+    </main>
+</head>
