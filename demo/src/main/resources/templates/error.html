@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base :: html(~{::content}, ~{::head-content})}">
+<head>
+    <th:block th:fragment="head-content">
+        <title>Error - E-Shop</title>
+    </th:block>
+</head>
+<body>
+    <main th:fragment="content">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 col-md-8">
+                    <div class="text-center">
+                        <!-- Error 404 -->
+                        <div th:if="${status == 404}">
+                            <div class="display-1 text-primary">
+                                <i class="bi bi-exclamation-triangle"></i>
+                            </div>
+                            <h1 class="display-4 fw-bold">404</h1>
+                            <h2 class="mb-4">Page Not Found</h2>
+                            <p class="lead mb-4">
+                                The page you're looking for doesn't exist or has been moved.
+                            </p>
+                        </div>
+                        
+                        <!-- Error 500 -->
+                        <div th:if="${status == 500}">
+                            <div class="display-1 text-danger">
+                                <i class="bi bi-bug"></i>
+                            </div>
+                            <h1 class="display-4 fw-bold">500</h1>
+                            <h2 class="mb-4">Internal Server Error</h2>
+                            <p class="lead mb-4">
+                                Something went wrong on our server. We're working to fix it.
+                            </p>
+                        </div>
+                        
+                        <!-- Error 403 -->
+                        <div th:if="${status == 403}">
+                            <div class="display-1 text-warning">
+                                <i class="bi bi-shield-exclamation"></i>
+                            </div>
+                            <h1 class="display-4 fw-bold">403</h1>
+                            <h2 class="mb-4">Access Denied</h2>
+                            <p class="lead mb-4">
+                                You don't have permission to access this resource.
+                            </p>
+                        </div>
+                        
+                        <!-- Generic Error -->
+                        <div th:if="${status != 404 and status != 500 and status != 403}">
+                            <div class="display-1 text-secondary">
+                                <i class="bi bi-exclamation-circle"></i>
+                            </div>
+                            <h1 class="display-4 fw-bold" th:text="${status ?: 'Error'}">Error</h1>
+                            <h2 class="mb-4">Something went wrong</h2>
+                            <p class="lead mb-4" th:text="${message ?: 'An unexpected error occurred.'}">
+                                An unexpected error occurred.
+                            </p>
+                        </div>
+                        
+                        <!-- Error Details (for development) -->
+                        <div class="alert alert-secondary text-start mt-4" th:if="${error and #strings.length(error) > 0}">
+                            <h6><i class="bi bi-info-circle"></i> Technical Details:</h6>
+                            <small th:text="${error}">Error details</small>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="d-flex gap-3 justify-content-center mt-4">
+                            <a th:href="@{/}" class="btn btn-primary">
+                                <i class="bi bi-house"></i> Go Home
+                            </a>
+                            <button onclick="history.back()" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left"></i> Go Back
+                            </button>
+                            <a th:href="@{/products}" class="btn btn-outline-primary">
+                                <i class="bi bi-grid"></i> Browse Products
+                            </a>
+                        </div>
+                        
+                        <!-- Help Section -->
+                        <div class="mt-5">
+                            <h5>Need Help?</h5>
+                            <p class="text-muted">
+                                If you continue to experience issues, please contact our support team.
+                            </p>
+                            <a href="mailto:support@eshop.com" class="btn btn-link">
+                                <i class="bi bi-envelope"></i> Contact Support
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base :: html(~{::content}, ~{::head-content})}">
+<head>
+    <th:block th:fragment="head-content">
+        <title>Shopping Cart - E-Shop</title>
+    </th:block>
+</head>
+<body>
+    <main th:fragment="content">
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-12">
+                    <h2><i class="bi bi-cart3"></i> Shopping Cart</h2>
+                    <p class="text-muted">Review your items before checkout</p>
+                </div>
+            </div>
+            
+            <!-- Demo Cart Items -->
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- Cart Item 1 -->
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-2">
+                                    <img src="https://via.placeholder.com/100x100?text=Product" 
+                                         alt="Product" class="img-fluid rounded">
+                                </div>
+                                <div class="col-md-4">
+                                    <h6>Smartphone</h6>
+                                    <small class="text-muted">Latest Android smartphone</small>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="input-group">
+                                        <button class="btn btn-outline-secondary btn-sm" type="button">-</button>
+                                        <input type="number" class="form-control form-control-sm text-center" value="1" min="1">
+                                        <button class="btn btn-outline-secondary btn-sm" type="button">+</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <span class="fw-bold text-success">₹29,999</span>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-danger btn-sm">
+                                        <i class="bi bi-trash"></i> Remove
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Cart Item 2 -->
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-2">
+                                    <img src="https://via.placeholder.com/100x100?text=Headphones" 
+                                         alt="Headphones" class="img-fluid rounded">
+                                </div>
+                                <div class="col-md-4">
+                                    <h6>Wireless Headphones</h6>
+                                    <small class="text-muted">Premium noise-cancelling</small>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="input-group">
+                                        <button class="btn btn-outline-secondary btn-sm" type="button">-</button>
+                                        <input type="number" class="form-control form-control-sm text-center" value="2" min="1">
+                                        <button class="btn btn-outline-secondary btn-sm" type="button">+</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <span class="fw-bold text-success">₹25,998</span>
+                                    <br><small class="text-muted text-decoration-line-through">₹31,998</small>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-danger btn-sm">
+                                        <i class="bi bi-trash"></i> Remove
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Continue Shopping -->
+                    <div class="mt-4">
+                        <a th:href="@{/products}" class="btn btn-outline-primary">
+                            <i class="bi bi-arrow-left"></i> Continue Shopping
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Order Summary -->
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="bi bi-receipt"></i> Order Summary</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Subtotal (3 items):</span>
+                                <span>₹55,997</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Discount:</span>
+                                <span class="text-success">-₹6,000</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Shipping:</span>
+                                <span class="text-success">FREE</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Tax:</span>
+                                <span>₹4,500</span>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between mb-3">
+                                <strong>Total:</strong>
+                                <strong class="text-success h5">₹54,497</strong>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <a th:href="@{/checkout}" class="btn btn-success btn-lg">
+                                    <i class="bi bi-credit-card"></i> Proceed to Checkout
+                                </a>
+                                <button class="btn btn-outline-secondary">
+                                    <i class="bi bi-heart"></i> Save for Later
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Promo Code -->
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <h6>Have a Promo Code?</h6>
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Enter promo code">
+                                <button class="btn btn-outline-primary" type="button">Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Estimated Delivery -->
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <h6><i class="bi bi-truck"></i> Estimated Delivery</h6>
+                            <p class="text-muted mb-0">3-5 business days</p>
+                            <small class="text-success">FREE shipping on orders over ₹1,000</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

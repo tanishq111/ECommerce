@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" 
+      th:replace="~{base :: html(~{::content}, ~{::head-content})}">
+<head>
+    <th:block th:fragment="head-content">
+        <title>My Profile - E-Shop</title>
+    </th:block>
+</head>
+<body>
+    <main th:fragment="content">
+        <div class="container mt-4">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <img th:src="@{/img/users/{image}(image=${user.profileImage})}" 
+                                 src="https://via.placeholder.com/150x150?text=Profile"
+                                 alt="Profile Picture" class="rounded-circle mb-3" width="100" height="100">
+                            <h5 th:text="${user.name}">User Name</h5>
+                            <p class="text-muted" th:text="${user.email}">user@email.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="list-group mt-3">
+                        <a href="#profile-info" class="list-group-item list-group-item-action active" 
+                           data-bs-toggle="pill">
+                            <i class="bi bi-person"></i> Profile Information
+                        </a>
+                        <a href="#change-password" class="list-group-item list-group-item-action" 
+                           data-bs-toggle="pill">
+                            <i class="bi bi-lock"></i> Change Password
+                        </a>
+                        <a th:href="@{/orders}" class="list-group-item list-group-item-action">
+                            <i class="bi bi-bag"></i> My Orders
+                        </a>
+                        <a th:href="@{/cart}" class="list-group-item list-group-item-action">
+                            <i class="bi bi-cart"></i> Shopping Cart
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Main Content -->
+                <div class="col-md-9">
+                    <div class="tab-content">
+                        <!-- Profile Information Tab -->
+                        <div class="tab-pane fade show active" id="profile-info">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4><i class="bi bi-person"></i> Profile Information</h4>
+                                </div>
+                                <div class="card-body">
+                                    <form th:action="@{/profile/update}" method="post" 
+                                          enctype="multipart/form-data" th:object="${user}">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-floating mb-3">
+                                                    <input type="text" class="form-control" id="name" 
+                                                           th:field="*{name}" placeholder="Full Name" required>
+                                                    <label for="name">Full Name</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-floating mb-3">
+                                                    <input type="email" class="form-control" id="email" 
+                                                           th:field="*{email}" placeholder="Email" required>
+                                                    <label for="email">Email Address</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-floating mb-3">
+                                            <input type="tel" class="form-control" id="phone" 
+                                                   th:field="*{phone}" placeholder="Phone" required>
+                                            <label for="phone">Phone Number</label>
+                                        </div>
+                                        
+                                        <div class="form-floating mb-3">
+                                            <textarea class="form-control" id="address" th:field="*{address}" 
+                                                      placeholder="Address" style="height: 100px;" required></textarea>
+                                            <label for="address">Address</label>
+                                        </div>
+                                        
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="bi bi-check-circle"></i> Update Profile
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Change Password Tab -->
+                        <div class="tab-pane fade" id="change-password">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4><i class="bi bi-lock"></i> Change Password</h4>
+                                </div>
+                                <div class="card-body">
+                                    <form th:action="@{/profile/change-password}" method="post">
+                                        <div class="form-floating mb-3">
+                                            <input type="password" class="form-control" id="currentPassword" 
+                                                   name="currentPassword" placeholder="Current Password" required>
+                                            <label for="currentPassword">Current Password</label>
+                                        </div>
+                                        
+                                        <div class="form-floating mb-3">
+                                            <input type="password" class="form-control" id="newPassword" 
+                                                   name="newPassword" placeholder="New Password" minlength="6" required>
+                                            <label for="newPassword">New Password</label>
+                                        </div>
+                                        
+                                        <div class="form-floating mb-3">
+                                            <input type="password" class="form-control" id="confirmNewPassword" 
+                                                   name="confirmNewPassword" placeholder="Confirm New Password" minlength="6" required>
+                                            <label for="confirmNewPassword">Confirm New Password</label>
+                                        </div>
+                                        
+                                        <div class="alert alert-info">
+                                            <i class="bi bi-info-circle"></i>
+                                            <strong>Password Requirements:</strong>
+                                            <ul class="mb-0 mt-2">
+                                                <li>At least 6 characters long</li>
+                                                <li>Contains letters and numbers</li>
+                                                <li>Avoid using personal information</li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                            <button type="submit" class="btn btn-warning">
+                                                <i class="bi bi-shield-lock"></i> Change Password
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <th:block th:fragment="scripts">
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Password confirmation validation
+                const newPassword = document.getElementById('newPassword');
+                const confirmNewPassword = document.getElementById('confirmNewPassword');
+                
+                function validatePasswordMatch() {
+                    if (newPassword.value !== confirmNewPassword.value) {
+                        confirmNewPassword.setCustomValidity("Passwords don't match");
+                    } else {
+                        confirmNewPassword.setCustomValidity('');
+                    }
+                }
+                
+                if (newPassword && confirmNewPassword) {
+                    newPassword.addEventListener('change', validatePasswordMatch);
+                    confirmNewPassword.addEventListener('keyup', validatePasswordMatch);
+                }
+            });
+        </script>
+    </th:block>
+</body>
+</html>
