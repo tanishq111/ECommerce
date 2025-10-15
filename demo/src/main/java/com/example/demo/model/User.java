@@ -11,6 +11,9 @@ import java.util.Set;
 /**
  * User entity for Spring Security authentication
  */
+
+
+ /// add a route -> addProduct -> only accessible to admin -> add a form -> update the product array
 @Entity
 @Table(name = "users", uniqueConstraints = {
     @UniqueConstraint(columnNames = "email")
