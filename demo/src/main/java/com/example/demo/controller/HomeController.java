@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.model.User;
@@ -18,54 +17,16 @@ import com.example.demo.model.Product;
 
 @Controller
 public class HomeController {
-     @GetMapping("/")
+    
+    @GetMapping("/")
     public String home(Model model) {
-         List<Category> categories = getSampleCategories();
+        List<Category> categories = getSampleCategories();
         model.addAttribute("categories", categories);
         List<Product> latestProducts = getSampleProducts();
         model.addAttribute("latestProducts", latestProducts.subList(0, Math.min(4, latestProducts.size())));
         return "index";
     }
 
-
-    @GetMapping("/login")
-    public String login(Model model) {
-        return "login";
-    }
-
-
-    @PostMapping("/login")
-public String authenticateUser(@RequestParam String username,
-                              @RequestParam String password,
-                              RedirectAttributes redirectAttributes) {
-    
-    if (!isValidUser(username, password)) {
-        redirectAttributes.addFlashAttribute("message", "Login successful!");
-        return "redirect:/"; // Redirect to homepage
-    } else {
-        redirectAttributes.addFlashAttribute("error", "Invalid credentials!");
-        return "redirect:/error"; // Back to login with error
-    }
-}
-
-    @GetMapping("/register")
-    public String register(Model model) {
-        model.addAttribute("user", new User());
-        model.addAttribute("pageTitle", "Create Account");
-        return "register";
-    }
-
-    
-    @PostMapping("/register")
-    public String registerUser(@ModelAttribute User user, 
-                              RedirectAttributes redirectAttributes) {   // redirect attributes to pass messages
-        
-        user.setProfileImage("default-profile.jpg");
-        System.out.println("Registering user: " + user.getName() + " with email: " + user.getEmail());
-        System.out.println("Profile image: " + user.getProfileImage());
-        
-        return "redirect:/";
-    }
 
     @GetMapping("/profile")
     public String profile(Model model) {
@@ -76,18 +37,15 @@ public String authenticateUser(@RequestParam String username,
         return "profile";
     }
 
-  
     @PostMapping("/profile/update")
     public String updateProfile(@ModelAttribute User user, 
                                RedirectAttributes redirectAttributes) {
         
         System.out.println("Updating profile for: " + user.getName());
-        
         redirectAttributes.addFlashAttribute("message", "Profile updated successfully!");
         return "redirect:/profile";
     }
 
-   
     @PostMapping("/profile/change-password")
     public String changePassword(@RequestParam String currentPassword,
                                 @RequestParam String newPassword,
@@ -100,19 +58,19 @@ public String authenticateUser(@RequestParam String username,
         }
         
         System.out.println("Changing password for user");
-        
         redirectAttributes.addFlashAttribute("message", "Password changed successfully!");
         return "redirect:/profile";
     }
     
-      @GetMapping("/products")
+    @GetMapping("/products")
     public String products(@RequestParam(value = "search", required = false) String search,
                           @RequestParam(value = "category", required = false) String category,
                           Model model) {
         
         List<Product> products = getSampleProducts();
 
-        if (search != null && !search.trim().isEmpty()) { // HW implemet category filterizatoin and add the emplty list logic as well for fliterd products
+        // Filter by search term
+        if (search != null && !search.trim().isEmpty()) {
             products = products.stream()
                 .filter(p -> p.getTitle().toLowerCase().contains(search.toLowerCase()) ||
                            p.getDescription().toLowerCase().contains(search.toLowerCase()))
@@ -120,7 +78,15 @@ public String authenticateUser(@RequestParam String username,
             model.addAttribute("searchTerm", search);
         }
         
-        model.addAttribute("products", products);  // here if we pass empty list then ->
+        // Filter by category
+        if (category != null && !category.trim().isEmpty()) {
+            products = products.stream()
+                .filter(p -> p.getCategory().getTitle().toLowerCase().contains(category.toLowerCase()))
+                .toList();
+            model.addAttribute("selectedCategory", category);
+        }
+        
+        model.addAttribute("products", products);
         model.addAttribute("categories", getSampleCategories());
         model.addAttribute("pageTitle", "Products");
         
@@ -131,30 +97,23 @@ public String authenticateUser(@RequestParam String username,
     public String cart(Model model) {
         model.addAttribute("pageTitle", "Shopping Cart");
         model.addAttribute("cartItemCount", 3);
-        // ican service that will give list and i pass that
         return "cart";
     }
 
-    
     @PostMapping("/cart/add")
     public String addToCart(@RequestParam Long productId, 
                            RedirectAttributes redirectAttributes) {
         
         System.out.println("Adding product " + productId + " to cart");
-
-        //service logic to update the cart
-        
         redirectAttributes.addFlashAttribute("message", "Product added to cart successfully!");
-        return "redirect:/";
+        return "redirect:/products";
     }
 
-  
     @GetMapping("/orders")
     public String orders(Model model) {
         model.addAttribute("pageTitle", "My Orders");
         return "orders";
     }
-
 
     @GetMapping("/error")
     public String error(@RequestParam(value = "status", required = false) Integer status,
@@ -168,7 +127,7 @@ public String authenticateUser(@RequestParam String username,
         return "error";
     }
 
-     private List<Category> getSampleCategories() {
+    private List<Category> getSampleCategories() {
         List<Category> categories = new ArrayList<>();
         categories.add(new Category(1L, "Electronics", "Latest gadgets and electronic devices", "electronics.jpg"));
         categories.add(new Category(2L, "Clothing", "Fashion and apparel for everyone", "clothing.jpg"));
@@ -203,9 +162,5 @@ public String authenticateUser(@RequestParam String username,
         products.add(new Product(11L, "Plant Pot Set", "Decorative ceramic plant pots set of 3", 1599.0, 40, "plant-pots.jpg", 0, categories.get(3)));
         
         return products;
-    }
-
-    private boolean isValidUser(String email, String password) {
-        return true; // this should call the service to validate user credentials
     }
 }
