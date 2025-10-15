@@ -90,10 +90,15 @@ public class UserService {
             roleRepository.save(adminRole);
         }
         
-        if (!roleRepository.existsByName("USER")) {
-            Role userRole = new Role("USER", "User role with limited access");
+        if (!roleRepository.existsByName("User")) {
+            Role userRole = new Role("User", "User role with limited access");
             roleRepository.save(userRole);
         }
+
+        if (!roleRepository.existsByName("Guest")) {
+            Role guestRole = new Role("Guest", "Guest role with minimal access");
+            roleRepository.save(guestRole); //DB might fai
+        } 
     }
 } 
 

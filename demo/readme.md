@@ -34,3 +34,14 @@ src/main/resources/
  │
  │    ├── forgot-password.html      # request reset
  │    └── reset-password.html       # reset form
+
+
+
+
+
+
+
+
+
+
+Task -> Add another 1. Vendor
